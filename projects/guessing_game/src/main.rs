@@ -13,30 +13,38 @@ fn main() {
     // print the secret number
     println!("The secret number is: {}", secret_number);
 
-    // print a second line to request input
-    println!("Please input your guess.");
+    // loop this function untill exit
+    loop {
+        // print a second line to request input
+        println!("Please input your guess.");
 
-    // create a mutable variable to capture the new string we need for the guessing
-    let mut guess = String::new();
+        // create a mutable variable to capture the new string we need for the guessing
+        let mut guess = String::new();
 
-    // require the io library for stdin input, read the line for the mutable value of guess
-    // if this failes, throw failed to read line error.
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        // require the io library for stdin input, read the line for the mutable value of guess
+        // if this failes, throw failed to read line error.
+        io::stdin().read_line(&mut guess)
+            .expect("Failed to read line");
 
 
-    // return your guess in a variable bound print line
-    println!("You guessed: {}", guess);
+        // return your guess in a variable bound print line
+        println!("You guessed: {}", guess);
 
-    // ccheck if the input is a string or an number
-    let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
+        // ccheck if the input is a string or an number
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
 
-    // match one of the multiple options with the value, use the compar library
-    match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        // match one of the multiple options with the value, use the compar library
+        match guess.cmp(&secret_number) {
+            Ordering::Less    => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal   => {
+                println!("You win!");
+                break;
+            }
+        }
     }
 
 
